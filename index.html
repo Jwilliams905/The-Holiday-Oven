@@ -3,84 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christmas Cookie Treat Box Order</title>
+    <title>Christmas Treat Box Orders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+        .container {
+            width: 50%;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            font-size: 16px;
+            margin-bottom: 5px;
+            display: block;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .order-summary {
+            margin-top: 30px;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-    <h1>Christmas Cookie Treat Box Order</h1>
-    <p>Order our treat boxes and help us buy Christmas presents for the kids!</p>
-    
-    <form id="orderForm" action="https://script.google.com/macros/s/AKfycbwV1Vh9pkqOYbNWgrqeDaoAESRGQYdrQyMFY5XRpMcEeRY96J-ZXg54dSUEQL-YGz12UQ/exec" method="POST">
-        <label for="name">Full Name:</label>
-        <input type="text" id="name" name="name" required><br><br>
 
-        <label for="email">Email Address:</label>
-        <input type="email" id="email" name="email" required><br><br>
+<div class="container">
+    <h1>Order Your Christmas Treat Box!</h1>
+    <p class="order-summary">
+        We’re selling these treat boxes to help us buy Christmas gifts for our kids. This is the only way we’ll be able to afford gifts this year, so your support means the world to us!
+    </p>
+    
+    <form id="orderForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
 
         <label for="phone">Phone Number:</label>
-        <input type="tel" id="phone" name="phone" required><br><br>
+        <input type="tel" id="phone" name="phone" required>
 
-        <label for="couple_quantity">Couple Box Quantity ($40 each, 30 treats):</label>
-        <input type="number" id="couple_quantity" name="couple_quantity" min="0" value="0"><br><br>
-
-        <label for="family_quantity">Family Box Quantity ($65 each, 60 treats):</label>
-        <input type="number" id="family_quantity" name="family_quantity" min="0" value="0"><br><br>
+        <label for="sizes">Treat Box Sizes:</label>
+        <div id="sizes">
+            <label>
+                Couple (30 treats for $40):
+                <input type="number" name="couple_quantity" min="0" placeholder="Enter quantity">
+            </label>
+            <label>
+                Family (60 treats for $65):
+                <input type="number" name="family_quantity" min="0" placeholder="Enter quantity">
+            </label>
+        </div>
 
         <label for="delivery">Pickup or Delivery:</label>
-        <select id="delivery" name="delivery">
-            <option value="pickup">Pickup</option>
-            <option value="delivery">Delivery</option>
-        </select><br><br>
+        <select id="delivery" name="delivery" required>
+            <option value="pickup">Pickup (Sunday, December 22nd)</option>
+            <option value="delivery">Delivery (Saturday, December 21st) (+$XX delivery fee)</option>
+        </select>
 
-        <label for="special_requests">Special Requests:</label>
-        <textarea id="special_requests" name="special_requests"></textarea><br><br>
+        <label for="special_requests">Special Pickup/Delivery Requests:</label>
+        <textarea id="special_requests" name="special_requests" rows="4" placeholder="Enter any special instructions"></textarea>
 
-        <label for="allergies">Any allergies or restrictions?</label>
-        <input type="text" id="allergies" name="allergies"><br><br>
+        <label for="allergies">Does anyone in your household have food allergies? If yes, please specify:</label>
+        <textarea id="allergies" name="allergies" rows="3"></textarea>
 
         <label for="payment">Payment Method:</label>
-        <select id="payment" name="payment">
+        <select id="payment" name="payment" required>
             <option value="venmo">Venmo</option>
             <option value="cashapp">Cashapp</option>
-            <option value="paypal">PayPal</option>
+            <option value="paypal">Paypal</option>
             <option value="cash">Cash</option>
-        </select><br><br>
+        </select>
 
         <button type="submit">Place Order</button>
     </form>
+</div>
 
-    <script>
-        // Prevent form submission and handle submission via Google Apps Script
-        const form = document.getElementById('orderForm');
+<script>
+    document.getElementById('orderForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
 
-        form.onsubmit = function(e) {
-            e.preventDefault();  // Prevent the default form submission behavior
+        const formData = new FormData(event.target);
+        const data = {};
 
-            const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
 
-            // Convert data to JSON format
-            const jsonData = JSON.stringify(data);
-
-            // Submit the data via fetch to Google Apps Script Web App URL
-            fetch('https://script.google.com/macros/s/AKfycbwV1Vh9pkqOYbNWgrqeDaoAESRGQYdrQyMFY5XRpMcEeRY96J-ZXg54dSUEQL-YGz12UQ/exec', {
+        try {
+            const response = await fetch(https://script.google.com/macros/s/AKfycbwV1Vh9pkqOYbNWgrqeDaoAESRGQYdrQyMFY5XRpMcEeRY96J-ZXg54dSUEQL-YGz12UQ/exec, {
                 method: 'POST',
-                body: jsonData,
                 headers: {
                     'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.text())
-            .then(result => {
-                alert("Order placed successfully!");
-                form.reset();  // Reset the form after submission
-            })
-            .catch(error => {
-                alert("There was an error submitting your order. Please try again.");
+                },
+                body: JSON.stringify(data)
             });
-        };
-    </script>
+
+            if (response.ok) {
+                alert("Thank you for your order! Your information has been saved.");
+                event.target.reset(); // Reset form after successful submission
+            } else {
+                alert("Something went wrong. Please try again.");
+            }
+        } catch (error) {
+            alert("There was an error processing your order. Please try again later.");
+        }
+    });
+</script>
+
 </body>
 </html>
